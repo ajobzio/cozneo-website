@@ -1,12 +1,12 @@
 /* ==========================================================
    Cozneo Venture
-   Palette: #0b0b0c (dominant) · #ffffff (secondary) · #c6f432 (small accent only)
+   Palette: #0b0b0c (dominant) · #ffffff (secondary) · #ff0000 (small accent only)
    Font: Poppins
    ========================================================== */
 :root {
   --black: #0b0b0c;
   --white: #ffffff;
-  --lime: #c6f432;
+  --accent: #ff0000;
   --font: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
   --pad: clamp(16px, 4.5vw, 80px);
   --header: 76px;
@@ -20,12 +20,12 @@ body {
   font-family: var(--font); font-size: 16px; line-height: 1.65;
   -webkit-font-smoothing: antialiased; overflow-x: hidden;
 }
-::selection { background: var(--lime); color: var(--black); }
+::selection { background: var(--accent); color: var(--black); }
 a { color: inherit; }
 h1, h2, h3, p { margin: 0; }
 h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.02; letter-spacing: -.045em; }
 .wrap { padding: 0 var(--pad); }
-.lime { color: var(--lime); }
+.accent { color: var(--accent); }
 .kicker {
   font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
   display: inline-flex; align-items: center; gap: 12px; margin-bottom: 28px;
@@ -40,10 +40,11 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
   border-bottom: 1px solid rgba(255, 255, 255, .1);
 }
 .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.45rem; letter-spacing: -.05em; text-decoration: none; }
-.logo-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 4px rgba(198, 244, 50, .18); }
+.logo-img { width: 34px; height: 34px; object-fit: contain; transition: transform .6s var(--ease); }
+.logo:hover .logo-img { transform: rotate(-12deg) scale(1.06); }
 .menu { display: flex; gap: 36px; }
 .menu a { text-decoration: none; font-size: .92rem; font-weight: 500; color: rgba(255, 255, 255, .7); position: relative; transition: color .25s; }
-.menu a::after { content: ""; position: absolute; left: 0; bottom: -6px; width: 100%; height: 2px; background: var(--lime); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease); }
+.menu a::after { content: ""; position: absolute; left: 0; bottom: -6px; width: 100%; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease); }
 .menu a:hover, .menu a.active { color: var(--white); }
 .menu a:hover::after, .menu a.active::after { transform: scaleX(1); transform-origin: left; }
 .header-cta {
@@ -94,19 +95,29 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
 .half:hover .half-glyph { transform: translateX(-30px) rotate(-6deg); opacity: .1; }
 .half-light .half-glyph { color: var(--black); }
 
+/* Services half mirrors the Technologies half: content sits on the right, clear of the centre seal */
+.half-light { align-items: flex-end; text-align: right; }
+.half-light .half-top { flex-direction: row-reverse; }
+.half-light .half-body { align-items: flex-end; }
+.half-light .half-link { align-self: flex-end; }
+.half-light .half-glyph { right: auto; left: -2%; }
+.half-light:hover .half-title { transform: translateX(-10px); }
+.half-light:hover .half-glyph { transform: translateX(30px) rotate(6deg); }
+
 .seal {
   position: absolute; left: 50%; top: 46%; width: clamp(140px, 13vw, 200px); aspect-ratio: 1;
   transform: translate(-50%, -50%); z-index: 3; pointer-events: none;
 }
 .seal-ring { width: 100%; height: 100%; animation: spin 22s linear infinite; }
 .seal-ring text { font-family: var(--font); font-size: 13.5px; font-weight: 600; letter-spacing: 0; fill: var(--black); }
-.seal::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--lime); box-shadow: 0 20px 60px -15px rgba(11, 11, 12, .55); }
+.seal::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent); box-shadow: 0 20px 60px -15px rgba(11, 11, 12, .55); }
 .seal-ring { position: relative; }
 .seal-core {
   position: absolute; inset: 0; margin: auto; width: 46%; height: 46%; border-radius: 50%;
-  background: var(--black); color: var(--lime); display: grid; place-items: center;
+  background: var(--black); color: var(--accent); display: grid; place-items: center;
   font-weight: 800; font-size: clamp(1.8rem, 2.6vw, 2.6rem); letter-spacing: -.05em;
 }
+.seal-core img { width: 64%; height: 64%; object-fit: contain; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .split-caption {
@@ -141,7 +152,7 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
 }
 .scrub .wd { color: rgba(11, 11, 12, .14); transition: color .3s, background-color .3s; }
 .scrub .wd.on { color: var(--black); }
-.scrub .wd.hl.on { text-decoration: underline; text-decoration-color: var(--lime); text-decoration-thickness: .09em; text-underline-offset: .14em; }
+.scrub .wd.hl.on { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: .09em; text-underline-offset: .14em; }
 .numbers { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(64px, 8vw, 120px); border-top: 2px solid var(--black); }
 .number { padding: 28px 24px 0 0; display: flex; flex-direction: column; gap: 6px; }
 .number + .number { padding-left: 24px; border-left: 1px solid rgba(11, 11, 12, .15); }
@@ -162,7 +173,6 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
   transform-origin: center top; transition: transform .2s linear;
 }
 .scard-white { background: var(--white); color: var(--black); }
-.scard-lime { background: var(--white); color: var(--black); }
 .scard-dark { background: var(--black); color: var(--white); border: 1px solid rgba(255, 255, 255, .16); }
 .scard-num { align-self: start; font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 800; line-height: .9; letter-spacing: -.07em; }
 .scard h3 { font-size: clamp(1.8rem, 3.6vw, 3.4rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.05; margin-bottom: 14px; }
@@ -172,7 +182,7 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
   stroke-linecap: round; stroke-linejoin: round; align-self: start;
 }
 .scard-dark .scard-icon { stroke: var(--white); }
-.scard-dark .scard-num { color: var(--lime); }
+.scard-dark .scard-num { color: var(--accent); }
 
 /* ---------- Group (structure) ---------- */
 .group { background: var(--black); color: var(--white); padding: clamp(100px, 12vw, 170px) 0; border-top: 1px solid rgba(255, 255, 255, .1); }
@@ -187,7 +197,8 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
 .tree-root b { display: block; font-size: 1.05rem; font-weight: 600; }
 .tree-root span { font-size: .78rem; color: rgba(11, 11, 12, .6); }
 .root-dot { width: 46px; height: 46px; flex: none; border-radius: 50%; background: var(--black); position: relative; }
-.root-dot::before { content: ""; position: absolute; inset: 0; margin: auto; width: 12px; height: 12px; border-radius: 50%; background: var(--lime); }
+.root-dot { display: grid; place-items: center; }
+.root-dot img { width: 30px; height: 30px; object-fit: contain; }
 .root-dot::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(11, 11, 12, .4); animation: ping 2.2s ease-out infinite; }
 @keyframes ping { from { transform: scale(.8); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
 .tree-lines { display: block; width: 100%; height: 90px; overflow: visible; }
@@ -214,14 +225,14 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
 .kid p { font-weight: 300; opacity: .75; }
 .kid ul { list-style: none; padding: 0; margin: 8px 0 18px; display: grid; gap: 0; }
 .kid li { padding: 12px 0; border-top: 1px solid currentColor; border-color: rgba(128, 128, 128, .3); font-size: .95rem; display: flex; align-items: center; gap: 12px; }
-.kid li::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--lime); flex: none; }
+.kid li::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); flex: none; }
 .kid-url { margin-top: auto; font-size: .85rem; font-weight: 600; opacity: .6; }
 
 /* ---------- Footer ---------- */
 .footer { background: var(--black); color: var(--white); border-top: 1px solid rgba(255, 255, 255, .1); padding: clamp(80px, 10vw, 140px) 0 28px; overflow: hidden; }
 .footer-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; }
 .footer-line { font-size: clamp(2.2rem, 5vw, 4.6rem); font-weight: 700; line-height: 1.05; letter-spacing: -.045em; }
-.footer-line u { text-decoration-color: var(--lime); text-decoration-thickness: .08em; text-underline-offset: .12em; }
+.footer-line u { text-decoration-color: var(--accent); text-decoration-thickness: .08em; text-underline-offset: .12em; }
 .footer-btns { display: flex; gap: 12px; flex-wrap: wrap; }
 .pill {
   text-decoration: none; font-weight: 600; font-size: .95rem; padding: 1em 1.6em; border-radius: 100px;
@@ -236,7 +247,7 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
   font-size: clamp(6rem, 25vw, 26rem); font-weight: 800; line-height: .78; letter-spacing: -.08em;
   margin: clamp(48px, 7vw, 96px) 0 32px; text-align: center;
   color: transparent;
-  background: linear-gradient(180deg, var(--white) 15%, var(--lime) 75%, rgba(198, 244, 50, .2) 100%);
+  background: linear-gradient(180deg, var(--white) 15%, var(--accent) 75%, rgba(255, 0, 0, .2) 100%);
   -webkit-background-clip: text; background-clip: text;
 }
 .footer-bottom {
@@ -285,6 +296,6 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .js .reveal { opacity: 1; transform: none; }
   .scrub .wd { color: var(--black); }
-  .scrub .wd.hl { text-decoration: underline; text-decoration-color: var(--lime); }
+  .scrub .wd.hl { text-decoration: underline; text-decoration-color: var(--accent); }
   .tree-lines path { stroke-dashoffset: 0; }
 }
