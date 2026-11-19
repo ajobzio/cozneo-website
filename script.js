@@ -45,14 +45,6 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 revealEls.forEach(el => io.observe(el));
 
-// ---------- Group tree: draw connector lines when visible ----------
-const tree = document.querySelector('.tree');
-if (tree) {
-  new IntersectionObserver(([e], obs) => {
-    if (e.isIntersecting) { tree.classList.add('drawn'); obs.disconnect(); }
-  }, { threshold: 0.3 }).observe(tree);
-}
-
 // ---------- About: words light up as you scroll ----------
 const scrub = document.querySelector('[data-scrub]');
 const words = [];
@@ -118,3 +110,68 @@ function onScroll() {
 window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('resize', onScroll);
 onScroll();
+
+// ---------- Back to top ----------
+// Custom eased scroll (the header is sticky, so "#top" anchors never scroll).
+const toTop = document.querySelector(".to-top");
+let scrollAnim = null;
+
+// cubic-bezier(.45, 0, .08, 1): soft start, long feather-light landing at the top
+function bezier(x1, y1, x2, y2) {
+  const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+  const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+  const sx = t => ((ax * t + bx) * t + cx) * t;
+  const sy = t => ((ay * t + by) * t + cy) * t;
+  const dx = t => (3 * ax * t + 2 * bx) * t + cx;
+  return x => {
+    let t = x;
+    for (let i = 0; i < 8; i++) {           // Newton-Raphson
+      const e = sx(t) - x, d = dx(t);
+      if (Math.abs(e) < 1e-6 || Math.abs(d) < 1e-6) break;
+      t -= e / d;
+    }
+    t = Math.min(Math.max(t, 0), 1);
+    return sy(t);
+  };
+}
+const ease = bezier(0.45, 0, 0.08, 1);
+
+function smoothScrollToTop() {
+  const start = window.scrollY;
+  if (start <= 0) return;
+  if (reduceMotion) { window.scrollTo(0, 0); return; }
+
+  const root = document.documentElement;
+  const prevBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";            // stop CSS smooth-scroll fighting the animation
+  const duration = Math.min(2000, Math.max(1000, start * 0.45));
+  const t0 = performance.now();
+
+  const stop = () => {
+    cancelAnimationFrame(scrollAnim); scrollAnim = null;
+    root.style.scrollBehavior = prevBehavior;
+    ["wheel", "touchstart", "keydown"].forEach(ev => window.removeEventListener(ev, stop));
+  };
+  ["wheel", "touchstart", "keydown"].forEach(ev => window.addEventListener(ev, stop, { passive: true }));
+
+  const step = now => {
+    const t = Math.min((now - t0) / duration, 1);
+    window.scrollTo(0, start * (1 - ease(t)));
+    if (t < 1) scrollAnim = requestAnimationFrame(step); else stop();
+  };
+  if (scrollAnim) cancelAnimationFrame(scrollAnim);
+  scrollAnim = requestAnimationFrame(step);
+}
+
+if (toTop) toTop.addEventListener("click", smoothScrollToTop);
+document.querySelectorAll("a[href=\"#top\"]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); smoothScrollToTop(); }));
+
+function updateToTop() {
+  if (!toTop) return;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  toTop.classList.toggle("show", window.scrollY > window.innerHeight * 0.6);
+  toTop.style.setProperty("--p", max > 0 ? (window.scrollY / max).toFixed(4) : 0);
+}
+window.addEventListener("scroll", updateToTop, { passive: true });
+window.addEventListener("resize", updateToTop);
+updateToTop();
