@@ -247,6 +247,30 @@ h2 { font-size: clamp(2.4rem, 5.6vw, 5.2rem); font-weight: 700; line-height: 1.0
   .scard { grid-template-columns: 1fr; align-items: start; }
   .scard-icon { display: none; }
 }
+
+/* Phones & tablets in portrait: the seam between the two halves (and the Cozneo seal on it)
+   sits exactly at the vertical centre of the screen, whatever the device height. */
+@media (max-width: 900px) and (min-height: 520px) {
+  .split { --seal: clamp(104px, 15svh, 150px); height: calc(100vh - var(--header)); height: calc(100svh - var(--header)); min-height: 0; }
+  .half { flex: none; min-height: 0; padding-top: clamp(14px, 2.6svh, 28px); padding-bottom: clamp(14px, 2.6svh, 28px); }
+  .half-dark { height: calc(50vh - var(--header)); height: calc(50svh - var(--header)); }
+  .half-light { height: 50vh; height: 50svh; }
+  /* keep content clear of the seal that straddles the seam */
+  .half-dark .half-body { padding-bottom: calc(var(--seal) / 2 + 6px); }
+  .half-light .half-body { padding-bottom: 0; }
+  .half-light { justify-content: flex-end; }
+  .half-light { gap: clamp(10px, 1.8svh, 18px); }
+  .half-body { gap: clamp(8px, 1.4svh, 16px); }
+  .half-title { font-size: clamp(1.9rem, 6.2svh, 3.4rem); }
+  .half-text { font-size: clamp(.82rem, 1.9svh, 1rem); }
+  .half-link i { width: 30px; height: 30px; }
+  .half-glyph { font-size: clamp(7rem, 26svh, 16rem); }
+  .seal { width: var(--seal); top: calc(50vh - var(--header)); top: calc(50svh - var(--header)); }
+}
+/* very short screens: drop the descriptions so everything fits around the centred seal */
+@media (max-width: 900px) and (min-height: 520px) and (max-height: 700px) {
+  .half-text { display: none; }
+}
 @media (max-width: 760px) {
   .menu {
     position: absolute; top: var(--header); left: 0; right: 0; flex-direction: column; gap: 0;
